@@ -13,6 +13,7 @@
 
   <!-- Main Stylesheet & Scripts -->
   <link rel="stylesheet" href="assets/styles/global.css" />
+  <script src="https://unpkg.com/launchdarkly-js-client-sdk@3"></script>
   <script src="assets/scripts/partyHorn.js" type="module"></script>
 </head>
 
@@ -42,6 +43,59 @@
       <audio class="hidden" src=""></audio>
     </section>
   </main>
+
+  <script>
+      function main()
+      {
+        // Set clientSideID to your LaunchDarkly client-side ID
+        const clientSideID = '647c4327830765131d495237';
+
+        // Set flagKey to the feature flag key you want to evaluate
+        const flagKey = 'blue-background';
+
+        // Set up the context properties. This context should appear on your
+        // LaunchDarkly contexts dashboard soon after you run the demo.
+        const context = {
+          kind: 'user',
+          key: Math.random().toString(36).substring(7),
+        };
+
+        const ldclient = LDClient.initialize(clientSideID, context);
+
+        function render() {
+            console.log('render');
+            const flagValue = ldclient.variation(flagKey, false);
+            console.log(flagValue);
+            if (flagValue) {
+                document.body.classList.add('blue');
+            }
+        }
+
+        ldclient.on('initialized', () => {
+            console.log('SDK successfully initialized!');
+        });
+        ldclient.on('failed', () => {
+            console.log('SDK failed to initialize');
+        });
+        ldclient.on('ready', render);
+        ldclient.on('change', render);
+
+
+        // Here we ensure that the SDK shuts down cleanly and has a chance
+        // to deliver analytics envets to LaunchDarkly before the program
+        // exits. If analytics events are not delivered, the context properties
+        // and flag usage statistics will not appear on your dashboard.
+        // In a normal long-running application, the SDK would continue
+        // running and events would be delivered automatically in the background.
+        ldclient.close();
+      }
+      main();
+    </script>
+
+
+
+
+
 </body>
 
 </html>
