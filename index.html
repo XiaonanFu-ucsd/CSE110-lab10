@@ -17,6 +17,16 @@
   <script src="assets/scripts/partyHorn.js" type="module"></script>
 </head>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SVVYRVKR0K"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SVVYRVKR0K');
+</script>
+
 <body>
   <header>
     <nav>
@@ -64,7 +74,7 @@
 
         function render() {
             console.log('render');
-            const flagValue = ldclient.variation(flagKey, false);
+            const flagValue = ldclient.variation(flagKey, true);
             console.log(flagValue);
             if (flagValue) {
                 document.body.classList.add('blue');
@@ -91,9 +101,6 @@
       }
       main();
     </script>
-
-
-
 
 
 </body>
